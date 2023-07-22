@@ -1,8 +1,8 @@
-// Context
-import { useMovieContext } from "../context/movie_context";
-
 // Components
 import Movie from "./Movie";
+
+// Context
+import { useMovieContext } from "../context/movie_context";
 
 const MovieList = () => {
   const { movies } = useMovieContext();

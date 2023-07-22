@@ -1,6 +1,7 @@
 // Components
 import Navbar from "./components/Navbar";
 import Main from "./components/Main";
+// import StarRating from "./components/StarRating";
 
 function App() {
   // Movie Context
@@ -15,4 +16,4 @@ function App() {
 
 export default App;
 
-// 5
+// UseEFFECT - 10
