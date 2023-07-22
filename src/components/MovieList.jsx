@@ -8,7 +8,7 @@ const MovieList = () => {
   const { movies } = useMovieContext();
 
   return (
-    <ul className="list">
+    <ul className="list list-movies">
       {movies?.map(movie => (
         <Movie key={movie.imdbID} movie={movie} />
       ))}

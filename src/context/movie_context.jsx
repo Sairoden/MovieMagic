@@ -13,6 +13,7 @@ export const MovieProvider = ({ children }) => {
   const [query, setQuery] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
+  const [selectedId, setSelectedId] = useState(null);
 
   useEffect(() => {
     async function fetchMovies() {
@@ -31,7 +32,6 @@ export const MovieProvider = ({ children }) => {
         if (data.Response === "False") throw new Error("Movie not found");
 
         setMovies(data.Search);
-        console.log(movies);
       } catch (err) {
         console.error(err.message);
         setError(err.message);
@@ -47,6 +47,7 @@ export const MovieProvider = ({ children }) => {
 
       return;
     }
+
     fetchMovies();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [query]);
@@ -60,6 +61,8 @@ export const MovieProvider = ({ children }) => {
     setQuery,
     isLoading,
     error,
+    selectedId,
+    setSelectedId,
   };
 
   return (
