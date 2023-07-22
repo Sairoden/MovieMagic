@@ -5,7 +5,7 @@ import { useState, useContext, createContext, useEffect } from "react";
 import { tempMovieData, tempWatchedData } from "../data";
 export const MovieContext = createContext();
 
-const API_KEY = "50089922";
+const KEY = "50089922";
 
 export const MovieProvider = ({ children }) => {
   const [movies, setMovies] = useState(tempMovieData);
@@ -13,7 +13,11 @@ export const MovieProvider = ({ children }) => {
   const [query, setQuery] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
+
+  // Single Movie
   const [selectedId, setSelectedId] = useState(null);
+  const [movie, setMovie] = useState({});
+  const [selectIsLoading, setSelectIsLoading] = useState(false);
 
   useEffect(() => {
     async function fetchMovies() {
@@ -21,7 +25,7 @@ export const MovieProvider = ({ children }) => {
         setIsLoading(true);
 
         const res = await fetch(
-          `http://www.omdbapi.com/?apikey=${API_KEY}&s=${query}`
+          `http://www.omdbapi.com/?apikey=${KEY}&s=${query}`
         );
 
         if (!res.ok)
@@ -52,6 +56,25 @@ export const MovieProvider = ({ children }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [query]);
 
+  useEffect(() => {
+    async function getMovieDetails() {
+      try {
+        setSelectIsLoading(true);
+        const res = await fetch(
+          `http://www.omdbapi.com/?apikey=${KEY}&i=${selectedId}`
+        );
+
+        const data = await res.json();
+        setMovie(data);
+      } catch (err) {
+        console.error(err.message);
+      } finally {
+        setSelectIsLoading(false);
+      }
+    }
+    getMovieDetails();
+  }, [selectedId]);
+
   const value = {
     movies,
     setMovies,
@@ -63,6 +86,8 @@ export const MovieProvider = ({ children }) => {
     error,
     selectedId,
     setSelectedId,
+    movie,
+    selectIsLoading,
   };
 
   return (
