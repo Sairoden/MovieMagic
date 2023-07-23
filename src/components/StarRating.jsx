@@ -1,5 +1,7 @@
 import { useState } from "react";
 
+import { useMovieContext } from "../context/movie_context";
+
 import Star from "./Star";
 
 const containerStyle = {
@@ -24,8 +26,11 @@ const StarRating = ({
   const [rating, setRating] = useState(defaultRating);
   const [tempRating, setTempRating] = useState(0);
 
+  const { setUserRating } = useMovieContext();
+
   const handleRating = rating => {
     setRating(rating);
+    setUserRating(rating);
   };
 
   const textStyle = {

@@ -2,14 +2,15 @@
 import { useState, useContext, createContext, useEffect } from "react";
 
 // Data
-import { tempMovieData, tempWatchedData } from "../data";
+// import { tempMovieData, tempWatchedData } from "../data";
 export const MovieContext = createContext();
 
 const KEY = "50089922";
 
 export const MovieProvider = ({ children }) => {
-  const [movies, setMovies] = useState(tempMovieData);
-  const [watched, setWatched] = useState(tempWatchedData);
+  // Movies
+  const [movies, setMovies] = useState([]);
+  const [watched, setWatched] = useState([]);
   const [query, setQuery] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
@@ -18,6 +19,7 @@ export const MovieProvider = ({ children }) => {
   const [selectedId, setSelectedId] = useState(null);
   const [movie, setMovie] = useState({});
   const [selectIsLoading, setSelectIsLoading] = useState(false);
+  const [userRating, setUserRating] = useState("");
 
   useEffect(() => {
     async function fetchMovies() {
@@ -88,6 +90,8 @@ export const MovieProvider = ({ children }) => {
     setSelectedId,
     movie,
     selectIsLoading,
+    userRating,
+    setUserRating,
   };
 
   return (
