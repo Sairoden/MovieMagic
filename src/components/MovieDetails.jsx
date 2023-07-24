@@ -1,3 +1,6 @@
+// React
+import { useEffect } from "react";
+
 // Components
 import StarRating from "./StarRating";
 import Loader from "./Loader";
@@ -56,6 +59,12 @@ const MovieDetail = () => {
     handleCloseMovie();
     setUserRating(0);
   };
+
+  useEffect(() => {
+    if (!title) return;
+
+    document.title = `Movie | ${title}`;
+  }, [title]);
 
   return (
     <div className="details">
