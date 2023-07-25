@@ -22,12 +22,15 @@ export const MovieProvider = ({ children }) => {
   const [userRating, setUserRating] = useState("");
 
   useEffect(() => {
+    const controller = new AbortController();
+
     async function fetchMovies() {
       try {
         setIsLoading(true);
 
         const res = await fetch(
-          `http://www.omdbapi.com/?apikey=${KEY}&s=${query}`
+          `http://www.omdbapi.com/?apikey=${KEY}&s=${query}`,
+          { signal: controller.signal }
         );
 
         if (!res.ok)
@@ -40,7 +43,8 @@ export const MovieProvider = ({ children }) => {
         setMovies(data.Search);
       } catch (err) {
         console.error(err.message);
-        setError(err.message);
+
+        if (err.name !== "AbortError") setError(err.message);
       } finally {
         setIsLoading(false);
         setError("");
@@ -55,6 +59,8 @@ export const MovieProvider = ({ children }) => {
     }
 
     fetchMovies();
+
+    return () => controller.abort();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [query]);
 
