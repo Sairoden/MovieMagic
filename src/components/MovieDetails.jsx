@@ -10,7 +10,6 @@ import { useMovieContext } from "../context/movie_context";
 
 const MovieDetail = () => {
   const {
-    setSelectedId,
     selectedId,
     movie,
     selectIsLoading,
@@ -18,6 +17,7 @@ const MovieDetail = () => {
     userRating,
     setUserRating,
     watched,
+    setSelectedId,
   } = useMovieContext();
 
   const {
@@ -40,10 +40,6 @@ const MovieDetail = () => {
     movie => movie.imdbID === selectedId
   )?.userRating;
 
-  const handleCloseMovie = () => {
-    setSelectedId(null);
-  };
-
   const handleAddWatched = () => {
     const newMovie = {
       imdbID: selectedId,
@@ -60,6 +56,10 @@ const MovieDetail = () => {
     setUserRating(0);
   };
 
+  const handleCloseMovie = () => {
+    setSelectedId(null);
+  };
+
   useEffect(() => {
     if (!title) return;
 
@@ -67,6 +67,15 @@ const MovieDetail = () => {
 
     return () => (document.title = "MovieMax");
   }, [title]);
+
+  useEffect(() => {
+    const callback = e => {
+      if (e.code === "Escape") handleCloseMovie();
+    };
+
+    document.addEventListener("keydown", callback);
+    return () => document.removeEventListener("keydown", callback);
+  }, [handleCloseMovie]);
 
   return (
     <div className="details">
