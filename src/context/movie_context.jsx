@@ -42,7 +42,7 @@ export const MovieProvider = ({ children }) => {
 
         setMovies(data.Search);
       } catch (err) {
-        console.error(err.message);
+        console.log(err.message);
 
         if (err.name !== "AbortError") setError(err.message);
       } finally {
@@ -75,7 +75,7 @@ export const MovieProvider = ({ children }) => {
         const data = await res.json();
         setMovie(data);
       } catch (err) {
-        console.error(err.message);
+        console.log(err.message);
       } finally {
         setSelectIsLoading(false);
       }
