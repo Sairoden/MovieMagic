@@ -10,7 +10,9 @@ const KEY = "50089922";
 export const MovieProvider = ({ children }) => {
   // Movies
   const [movies, setMovies] = useState([]);
-  const [watched, setWatched] = useState([]);
+  const [watched, setWatched] = useState(
+    () => JSON.parse(localStorage.getItem("watched")) || []
+  );
   const [query, setQuery] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
@@ -82,6 +84,10 @@ export const MovieProvider = ({ children }) => {
     }
     getMovieDetails();
   }, [selectedId]);
+
+  useEffect(() => {
+    localStorage.setItem("watched", JSON.stringify(watched));
+  }, [watched]);
 
   const value = {
     movies,
