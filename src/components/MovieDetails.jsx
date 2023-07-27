@@ -1,5 +1,5 @@
 // React
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 
 // Components
 import StarRating from "./StarRating";
@@ -7,6 +7,7 @@ import Loader from "./Loader";
 
 // Context
 import { useMovieContext } from "../context/movie_context";
+import { useKey } from "../useKey";
 
 const MovieDetail = () => {
   const {
@@ -33,12 +34,16 @@ const MovieDetail = () => {
     Genre: genre,
   } = movie;
 
+  const countRef = useRef(0);
+
   movie.userRating = userRating.toString();
 
   const isWatched = watched.map(movie => movie.imdbID).includes(selectedId);
   const watchedUserRating = watched.find(
     movie => movie.imdbID === selectedId
   )?.userRating;
+
+  useKey("Escape", handleCloseMovie);
 
   const handleAddWatched = () => {
     const newMovie = {
@@ -49,6 +54,7 @@ const MovieDetail = () => {
       imdbRating: +imdbRating,
       runtime: +runtime.split(" ").at(0),
       userRating,
+      countRatingDecisions: countRef.current,
     };
 
     setWatched(movies => [...movies, newMovie]);
@@ -56,9 +62,9 @@ const MovieDetail = () => {
     setUserRating(0);
   };
 
-  const handleCloseMovie = () => {
+  function handleCloseMovie() {
     setSelectedId(null);
-  };
+  }
 
   useEffect(() => {
     if (!title) return;
@@ -69,13 +75,8 @@ const MovieDetail = () => {
   }, [title]);
 
   useEffect(() => {
-    const callback = e => {
-      if (e.code === "Escape") handleCloseMovie();
-    };
-
-    document.addEventListener("keydown", callback);
-    return () => document.removeEventListener("keydown", callback);
-  }, [handleCloseMovie]);
+    if (userRating) countRef.current++;
+  }, [userRating]);
 
   return (
     <div className="details">

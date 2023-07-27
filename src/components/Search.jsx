@@ -1,26 +1,17 @@
-import { useRef, useEffect } from "react";
+import { useRef } from "react";
 
 import { useMovieContext } from "../context/movie_context";
+import { useKey } from "../useKey";
 
 const Search = () => {
   const { query, setQuery } = useMovieContext();
-
   const inputEl = useRef(null);
 
-  useEffect(() => {
-    const callback = e => {
-      if (document.activeElement === inputEl.current) return;
-
-      if (e.code === "Enter") {
-        inputEl.current.focus();
-        setQuery("");
-      }
-    };
-
-    document.addEventListener("keydown", callback);
-
-    return () => document.addEventListener("keydown", callback);
-  }, [setQuery]);
+  useKey("Enter", function () {
+    if (document.activeElement === inputEl.current) return;
+    inputEl.current.focus();
+    setQuery("");
+  });
 
   return (
     <input
